@@ -1,8 +1,7 @@
-import CommandPrompt from './command-prompt';
-// Import PhoneModelScene from './phone-model';
 import { styled } from './styled';
+import { usePhoneModelStore } from './phone-model/hooks';
+import CommandPrompt from './command-prompt';
 import Video from './phone-model';
-import { usePhoneModelStore } from './phone-model/store';
 
 export default function App() {
   const setBackColor = usePhoneModelStore((s) => s.setBackColor);
@@ -12,7 +11,7 @@ export default function App() {
       <VideoWrapper>
         <Video />
       </VideoWrapper>
-      {/* <PhoneModelScene /> */}
+
       <ColorSwatches>
         <ColorSwatch
           style={{ backgroundColor: '#fcba03' }}

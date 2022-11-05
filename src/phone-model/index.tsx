@@ -1,19 +1,18 @@
 import { Player } from '@remotion/player';
+import * as constants from './constants';
 import Scene from './Scene';
 
-const aspectRatio = 9 / 16;
-
 export default function Video() {
-  const width = 1280;
-  const height = width * aspectRatio;
+  const width = constants.VIDEO_WIDTH;
+  const height = width * constants.ASPECT_RATIO;
 
   return (
     <Player
       loop
       autoPlay
       component={Scene}
-      durationInFrames={150}
-      fps={30}
+      durationInFrames={constants.DURATION_IN_FRAMERS}
+      fps={constants.FPS}
       compositionWidth={width}
       compositionHeight={height}
     />

@@ -1,7 +1,7 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { styled, keyframes } from '../styled';
 import { useEffect, useState } from 'react';
-import { usePhoneModelStore } from '../phone-model/store';
+import { usePhoneModelStore } from '../phone-model/hooks';
 
 export default function CommandPrompt() {
   const [open, setOpen] = useState(false);
