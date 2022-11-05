@@ -3,6 +3,7 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { usePhoneModelStore } from './store';
 
 const CAMERA_DISTANCE = 1;
 
@@ -14,15 +15,16 @@ export default function PhoneModel() {
   const { materials } = gltf;
   const nodes = gltf.nodes as any;
   const { fps, durationInFrames } = useVideoConfig();
+  const backColor = usePhoneModelStore((s) => s.backColor);
 
   useLayoutEffect(() => {
+    (materials.Body as any).color.set(backColor);
     // Camera.position.set(-0.1, 0.4, 5);
-    // materials.Body.color.set('#9BB5CE');
     // If (window.matchMedia('(max-width: 48em)').matches) {
     //   camera.fov = 18;
     //   camera.updateProjectionMatrix();
     // }
-  }, []);
+  }, [backColor]);
 
   useEffect(() => {
     camera.position.set(0, 0, CAMERA_DISTANCE);

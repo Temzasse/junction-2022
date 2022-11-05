@@ -1,10 +1,12 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { styled, keyframes } from '../styled';
 import { useEffect, useState } from 'react';
+import { usePhoneModelStore } from '../phone-model/store';
 
 export default function CommandPrompt() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
+  const setBackColor = usePhoneModelStore((s) => s.setBackColor);
 
   useEffect(() => {
     const down = (e: any) => {
@@ -19,17 +21,42 @@ export default function CommandPrompt() {
     return () => document.removeEventListener('keydown', down);
   }, []);
 
+  function handleSubmit(event: any) {
+    event.preventDefault();
+    setOpen(false);
+    requestAnimationFrame(() => {
+      setBackColor('#0bd9d5');
+    });
+  }
+
   return (
     <DialogPrimitive.Root open={open}>
       <DialogPrimitive.Portal>
         <Overlay />
         <Content>
-          <CommandPromptForm>
+          <CommandPromptForm onSubmit={handleSubmit}>
             <CommandPromptInput
               placeholder="What would you like to generate?"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
+            {Boolean(value) && (
+              <CommandPromptSubmitButton type="submit">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </CommandPromptSubmitButton>
+            )}
           </CommandPromptForm>
         </Content>
       </DialogPrimitive.Portal>
@@ -37,7 +64,7 @@ export default function CommandPrompt() {
   );
 }
 
-const overlayShow = keyframes({
+const show = keyframes({
   '0%': { opacity: 0 },
   '100%': { opacity: 1 },
 });
@@ -47,22 +74,43 @@ const contentShow = keyframes({
   '100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
 });
 
-const CommandPromptForm = styled('form', {});
+const CommandPromptForm = styled('form', {
+  backgroundColor: '$elevated',
+  border: 'none',
+  outline: 'none',
+  color: '$textMuted',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  paddingRight: 8,
+});
+
+const CommandPromptSubmitButton = styled('button', {
+  color: '$textMuted',
+  padding: '6px 8px',
+  borderRadius: 4,
+  border: '1px solid $muted5',
+  animation: `${show} 300ms cubic-bezier(0.16, 1, 0.3, 1)`,
+  svg: {
+    width: 16,
+    height: 16,
+  },
+});
 
 const CommandPromptInput = styled('input', {
-  backgroundColor: '$elevated',
   border: 'none',
   width: '100%',
   padding: 16,
   outline: 'none',
   color: '$textMuted',
+  background: 'transparent',
 });
 
 const Overlay = styled(DialogPrimitive.Overlay, {
   backgroundColor: '$backdrop',
   position: 'fixed',
   inset: 0,
-  animation: `${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+  animation: `${show} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
   backdropFilter: 'blur(10px)',
 });
 
